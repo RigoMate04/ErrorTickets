@@ -3,7 +3,7 @@ import styles from './styles/AssTicModStyles.module.css';
 
 function AssignTicketModal({closeAssignTicketModal, ticket}){
     const [employees, setEmployees] = useState([]);
-  
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
     useEffect(() => {
         async function fetchEmployees() {
@@ -32,6 +32,7 @@ function AssignTicketModal({closeAssignTicketModal, ticket}){
                     alert("Válassz ki egy munkatársat!");
                     return;
                 }
+
             const response = await fetch(`http://localhost:3001/assignTicket/${ticket.id}`, {
                 method: "POST",
                 headers: {
@@ -39,7 +40,7 @@ function AssignTicketModal({closeAssignTicketModal, ticket}){
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "selected": Number(selected)
+                    "selected": Number(selected.value)
                 })
             });
             
@@ -67,8 +68,8 @@ function AssignTicketModal({closeAssignTicketModal, ticket}){
                             {employees.length > 0 ? employees.map(employee =>{
                                 return (
                                     <div key={employee.id} className={styles.employee}>
-                                        <input className="form-check-input" type="checkbox" value="" id={`check${employee.id}`}/>
-                                        <label className="form-check-label" for={`check${employee.id}`}> {employee.username} </label>
+                                        <input className="form-check-input" type="checkbox" value={employee.id} id={`check${employee.id}`}/>
+                                        <label className="form-check-label" htmlFor={`check${employee.id}`}> {employee.username} </label>
                                     </div>
                                 );
                             }) : (<p>Nincs elérhető munkatárs.</p> )}

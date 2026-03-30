@@ -395,7 +395,7 @@ app.delete("/deleteTicket/:id",async (req,res) =>{
 
 app.post("/modifyTicket/:id", async (req, res) => {
     try {
-            const body =req.body;
+            const body = req.body;
 
             if(Object.keys(body).length !== 4){
                 throw new Error("Invalid body");
@@ -459,6 +459,31 @@ app.get("/listStaff", async (req, res) => {
 
 
 app.post("/assignTicket/:ticketId", async (req, res) => {
+    try {
+        const body = req.body;
+
+        if(Object.keys(body).length !==1){
+            throw new Error("Invalid body.");
+        }
+
+        if(!body.employeeId || typeof body.employeeId !== "number"){
+            throw new Error("Invalid employeeId");
+        }
+
+        const[insertTicketResult] = await pool.query("UPDATE tickets SET userid=? WHERE id=?;",body.employeeId,req.params.id);
+
+         if(insertTicketResult.affectedRows !== 1){
+                throw new Error("Failed to modify ticket");
+            }
+            res.json({
+                "message": "Ticket assigned successfully"
+            });
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({"message": "Failed to assign ticket!"})
+    }
     
 });
 
