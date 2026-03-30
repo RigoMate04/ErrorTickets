@@ -1,0 +1,31 @@
+.componentBackground{
+  width:100%;
+  min-height:80vh;        
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center; 
+  align-items:center;     
+
+  text-align:center;
+
+  border:none;
+  outline:none;
+  box-shadow:none;
+}
+
+.emoji{
+  font-size:60px;
+  margin-bottom:10px;
+}
+
+.emptyState{
+  margin:0;
+  font-size:22px;
+}
+
+.textMuted{
+  margin-top:5px;
+  color:#777;
+}

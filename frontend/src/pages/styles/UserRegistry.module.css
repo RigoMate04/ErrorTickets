@@ -1,0 +1,11 @@
+.registry_table {
+    border-collapse: collapse; 
+    margin: 100px auto;        
+}
+
+.registry_table td,
+.registry_table th{
+    border: 1px solid black;
+    padding: 20px;
+    text-align: center;
+}

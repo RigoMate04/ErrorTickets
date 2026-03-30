@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modalContainer {
+  width: 500px;
+  height: 500px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.modalContainer .title {
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+
+.modalContainer .body {
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  text-align: center;
+  flex-direction: column;
+}
+
+  .modalContainer .inputBox{
+        position: relative;
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+        
+    }
+    
+
+    .inputBox input{
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        border: 2px solid rgba(255, 255, 255, 0.336);
+        border-radius: 30px;
+        font-size: 16px;
+        color: #fff;
+        padding: 20px 45px 20px 20px;
+    }
+    .inputBox input::placeholder{
+        color: #fff;
+    }
+
+  .inputBox i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+  }
+
+.modalContainer .footer {
+  flex: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer .footer button {
+  width: 150px;
+  height: 45px;
+  margin: 10px;
+  border: none;
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modalContainer .body{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:20px;
+  width:100%;
+}
+
+.formGroup{
+  display:flex;
+  flex-direction:column;
+}
+
+.fullWidth{
+  grid-column: span 2;
+}
+
+.formGroup label{
+  font-size:14px;
+  margin-bottom:6px;
+  font-weight:500;
+  color:#444;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea{
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:14px;
+  transition:0.2s;
+}
+
+.formGroup textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus{
+  outline:none;
+  border-color:cornflowerblue;
+  box-shadow:0 0 0 2px rgba(100,149,237,0.2);
+}
