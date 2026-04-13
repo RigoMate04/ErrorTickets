@@ -1,9 +1,10 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import styles from './styles/AssTicModStyles.module.css';
 
-function AssignTicketModal({closeAssignTicketModal, ticket}){
+function AssignTicketModal({ closeAssignTicketModal, ticket }) {
+
     const [employees, setEmployees] = useState([]);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [selectedEmployees, setSelectedEmployees] = useState([]);
 
     useEffect(() => {
         async function fetchEmployees() {
@@ -24,14 +25,36 @@ function AssignTicketModal({closeAssignTicketModal, ticket}){
         fetchEmployees();
     }, []);
 
-    async function assignEmployeeToTicket(){
-        try {
-              const selected = document.querySelector('input[type="checkbox"]:checked');
+    function handleCheckboxChange(employeeId) {
 
-                if (!selected) {
-                    alert("Válassz ki egy munkatársat!");
-                    return;
-                }
+        setSelectedEmployees(prev => {
+
+            if (prev.includes(employeeId)) {
+                return prev.filter(id => id !== employeeId);
+            }
+
+            return [...prev, employeeId];
+        });
+    }
+
+    async function assignEmployeeToTicket() {
+        if (!ticket || !ticket.id) {
+        console.error("Ticket is null:", ticket);
+        alert("Hiba: nincs ticket kiválasztva");
+        return;
+    }
+
+     if (selectedEmployees.length === 0) {
+        alert("Válassz ki legalább egy munkatársat!");
+        return;
+     }
+
+        if (selectedEmployees.length === 0) {
+            alert("Válassz ki legalább egy munkatársat!");
+            return;
+        }
+
+        try {
 
             const response = await fetch(`http://localhost:3001/assignTicket/${ticket.id}`, {
                 method: "POST",
@@ -40,49 +63,74 @@ function AssignTicketModal({closeAssignTicketModal, ticket}){
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "selected": Number(selected.value)
+                    employeeIds: selectedEmployees
                 })
             });
-            
-            
+
             const data = await response.json();
 
-            if(!response.ok){
+            if (!response.ok) {
                 alert(`Sikertelen hozzárendelés: ${data.message}`);
             } else {
-                alert('Sikeres hozzárendelés');
+                alert("Sikeres hozzárendelés");
             }
+
         } catch (err) {
             console.log(err);
         }
     }
-    
-    
-    return(
+
+    return (
         <div className={styles.modalBackground}>
             <div className={styles.modalContainer}>
-                    <div className={styles.title}>
-                        <h1>Hiba kiosztása</h1>
-                    </div>
-                        <div className={styles.body}>
-                            {employees.length > 0 ? employees.map(employee =>{
-                                return (
-                                    <div key={employee.id} className={styles.employee}>
-                                        <input className="form-check-input" type="checkbox" value={employee.id} id={`check${employee.id}`}/>
-                                        <label className="form-check-label" htmlFor={`check${employee.id}`}> {employee.username} </label>
-                                    </div>
-                                );
-                            }) : (<p>Nincs elérhető munkatárs.</p> )}
-                        </div>
-                    <div className={styles.footer}>
-                        <button className={styles.closeBtn} onClick={() => closeAssignTicketModal(false)}>Mégse</button>
-                        <button className={styles.saveBtn} onClick={assignEmployeeToTicket}>Kiosztás</button>
-                    </div>
+
+                <div className={styles.title}>
+                    <h1>Hiba kiosztása</h1>
+                </div>
+
+                <div className={styles.body}>
+
+                    {employees.length > 0 ? (
+                        employees.map(employee => (
+                            <div key={employee.id} className={styles.employee}>
+
+                                <input
+                                    type="checkbox"
+                                    checked={selectedEmployees.includes(employee.id)}
+                                    onChange={() => handleCheckboxChange(employee.id)}
+                                />
+
+                                <label>
+                                    {employee.username}
+                                </label>
+
+                            </div>
+                        ))
+                    ) : (
+                        <p>Nincs elérhető munkatárs.</p>
+                    )}
+
+                </div>
+
+                <div className={styles.footer}>
+                    <button
+                        className={styles.closeBtn}
+                        onClick={() => closeAssignTicketModal(false)}
+                    >
+                        Mégse
+                    </button>
+
+                    <button
+                        className={styles.saveBtn}
+                        onClick={assignEmployeeToTicket}
+                    >
+                        Kiosztás
+                    </button>
+                </div>
+
             </div>
         </div>
-
-           
-    )
+    );
 }
 
 export default AssignTicketModal;

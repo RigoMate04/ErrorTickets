@@ -395,6 +395,7 @@ app.delete("/deleteTicket/:id",async (req,res) =>{
 
 app.post("/modifyTicket/:id", async (req, res) => {
     try {
+        
             const body = req.body;
 
             if(Object.keys(body).length !== 4){
@@ -460,24 +461,35 @@ app.get("/listStaff", async (req, res) => {
 
 app.post("/assignTicket/:ticketId", async (req, res) => {
     try {
-        const body = req.body;
+        const ticketId = Number(req.params.ticketId);
+        const { employeeIds } = req.body;
 
-        if(Object.keys(body).length !==1){
-            throw new Error("Invalid body.");
-        }
-
-        if(!body.employeeId || typeof body.employeeId !== "number"){
-            throw new Error("Invalid employeeId");
-        }
-
-        const[insertTicketResult] = await pool.query("UPDATE tickets SET userid=? WHERE id=?;",body.employeeId,req.params.id);
-
-         if(insertTicketResult.affectedRows !== 1){
-                throw new Error("Failed to modify ticket");
-            }
-            res.json({
-                "message": "Ticket assigned successfully"
+        
+        if (!Array.isArray(employeeIds) || employeeIds.length === 0) {
+            return res.status(400).json({
+                message: "Invalid employeeIds"
             });
+        }
+
+        
+        const parsedIds = employeeIds.map(id => Number(id));
+
+        if (parsedIds.some(id => isNaN(id))) {
+            return res.status(400).json({
+                message: "employeeIds must contain numbers"
+            });
+        }
+
+        
+        for (const employeeIds of parsedIds) {
+            await pool.query(
+                 "UPDATE tickets SET userid = ? WHERE id = ?", [JSON.stringify(employeeIds), ticketId] );             
+
+        }
+
+        res.json({
+            message: "Employees assigned successfully"
+        });
 
         
     } catch (error) {

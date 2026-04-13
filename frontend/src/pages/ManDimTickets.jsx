@@ -75,8 +75,8 @@ export default function OwnedTickets() {
                             <h6 className="card-title">{ticket.place}</h6>
                             <p className="card-text">{ticket.description}</p>
                             <h6 className="card-title">{ticket.userid}</h6>
-                            <button className="btn btn-success me-2" onClick={() =>{setIsAssignModalOpen(true)}}>Kiosztás</button>
-                            <button className="btn btn-primary me-2" onClick={() => { setSelectedTicket(ticket); setIsChangeModalOpen(true)}}>Módosítás</button>
+                            <button className="btn btn-success me-2" onClick={() =>{setSelectedTicket(ticket); setIsAssignModalOpen(true)}}>Kiosztás</button>
+                            <button className="btn btn-primary me-2" onClick={() => {setSelectedTicket(ticket); setIsChangeModalOpen(true)}}>Módosítás</button>
                             <button className="btn btn-danger" onClick={() => deleteTicket(ticket.id)}>Törlés</button>
                         </div>
                         <div className="card-footer text-body-secondary">{ticket.formatted_created_at}</div>
